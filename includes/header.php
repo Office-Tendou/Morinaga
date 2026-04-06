@@ -1,0 +1,56 @@
+<?php
+// includes/header.php — Shared header, nav, meta tags
+$current   = basename($_SERVER['PHP_SELF'], '.php');
+$title     = isset($page_title) ? htmlspecialchars($page_title) : 'Tendou — Creative Agency | Web · Animation · Brand';
+$desc      = isset($meta_desc)  ? htmlspecialchars($meta_desc)  : 'Tendou is a premium creative agency in Grand Prairie TX. Web design, animation, branding and digital marketing for enterprise clients.';
+?>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><?php echo $title; ?></title>
+<meta name="description" content="<?php echo $desc; ?>">
+<meta name="keywords" content="web design, animation, branding, UI UX, SEO, app development, Grand Prairie TX, creative agency">
+<meta property="og:title" content="<?php echo $title; ?>">
+<meta property="og:description" content="<?php echo $desc; ?>">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tendou.us">
+<link rel="canonical" href="https://tendou.us/<?php echo ($current==='index')?'':$current.'.php'; ?>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<nav id="mainNav">
+  <a class="nav-logo" href="index.php">
+    <img src="assets/image/logo.png"  alt="Tendou" height="32">
+  </a>
+  <div class="nav-links">
+    <?php
+    $pages = ['index'=>'Home','services'=>'Services','portfolio'=>'Portfolio','about'=>'About','blog'=>'Blog','contact'=>'Contact'];
+    foreach($pages as $slug=>$label):
+      $href  = ($slug==='index') ? 'index.php' : $slug.'.php';
+      $class = ($current===$slug) ? ' class="active"' : '';
+    ?>
+    <a href="<?php echo $href; ?>"<?php echo $class; ?>><?php echo $label; ?></a>
+    <?php endforeach; ?>
+  </div>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀</span></button>
+    <a href="contact.php" class="nav-cta"><span>Start a Project</span></a>
+    <button class="ham" onclick="toggleMob()" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="mob-menu" id="mobMenu">
+  <?php foreach($pages as $slug=>$label): $href=($slug==='index')?'index.php':$slug.'.php'; ?>
+  <a href="<?php echo $href; ?>"><?php echo $label; ?></a>
+  <?php endforeach; ?>
+  <a href="contact.php" class="btn-p" style="text-align:center;margin-top:.5rem">Start a Project →</a>
+</div>
