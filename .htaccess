@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# Hide .php extension
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ $1.php [L,QSA]
+
+# Blog posts
+RewriteRule ^blog/([0-9]{3})$ blogs/blog-$1.php [L]
+
+# Default index
+RewriteRule ^$ index.php [L]
+

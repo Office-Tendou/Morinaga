@@ -40,12 +40,14 @@
   <div class="ft-bottom">
     <span class="ft-copy">&copy; <?php echo date('Y'); ?> Tendou. All rights reserved.</span>
     <div class="ft-legal">
-      <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Service</a>
-      <a href="#">Sitemap</a>
+      <a href="privacy-policy.php">Privacy Policy</a>
+      <a href="cookies-policy.php">Cookies Policy</a>
+      <a href="terms-of-service.php">Terms of Service</a>
+      <a href="sitemap.php">Sitemap</a>
     </div>
   </div>
 </footer>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
+

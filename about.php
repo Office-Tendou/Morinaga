@@ -58,7 +58,7 @@ $team = [
 </div>
 
 <!-- VALUES -->
-<div class="sec-b">
+<div class="sec-b" style="padding-bottom: 0px;">
 <div class="inner">
   <div class="eyebrow rv">Our Values</div>
   <h2 class="h2 rv d1">What drives our <span class="g">work</span></h2>
@@ -75,20 +75,22 @@ $team = [
 </div>
 
 <!-- TEAM -->
-<div class="sec">
+<!-- <div class="sec">
 <div class="inner">
   <div class="eyebrow rv">The Team</div>
   <h2 class="h2 rv d1">The minds behind the <span class="g">magic</span></h2>
   <div class="team-grid">
-    <?php foreach($team as $i => $m): ?>
-    <div class="team-card rv<?php echo $i?' d'.$i:''; ?>">
-      <div class="tphoto" style="background:<?php echo $m[3]; ?>"><div class="tinit"><?php echo $m[0]; ?></div></div>
-      <div class="tinfo"><div class="tnm"><?php echo $m[1]; ?></div><div class="trl"><?php echo $m[2]; ?></div></div>
+    <?php 
+    //foreach($team as $i => $m): ?>
+    <div class="team-card rv<?php //echo $i?' d'.$i:''; ?>">
+      <div class="tphoto" style="background:<?php //echo $m[3]; ?>"><div class="tinit"><?php //echo $m[0]; ?></div></div>
+      <div class="tinfo"><div class="tnm"><?php //echo $m[1]; ?></div><div class="trl"><?php //echo $m[2]; ?></div></div>
     </div>
-    <?php endforeach; ?>
+    <?php 
+  //endforeach; ?>
   </div>
 </div>
-</div>
+</div> -->
 
 <div class="cta-band">
   <div class="cta-glow"></div>

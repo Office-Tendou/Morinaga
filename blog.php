@@ -3,14 +3,28 @@ $page_title = 'Blog & Insights — Tendou Creative Agency';
 $meta_desc  = 'Strategy, design, and digital intelligence from Tendou\'s team of creative and technical experts.';
 require_once 'includes/header.php';
 
-$posts = [
-  ['Brand Strategy','Why Enterprise Brands Are Abandoning Template Design in 2025','The shift toward bespoke digital identity is accelerating. Here\'s what\'s driving corporate brands to invest in custom creative.','March 18, 2025','linear-gradient(135deg,#0B0E28,#2A338F,#2BAADB)'],
-  ['Animation','The Business Case for 3D Animation in Corporate Communications','Animated content generates 3x more engagement. We break down the full ROI case for animation investment at enterprise scale.','February 28, 2025','linear-gradient(135deg,#1A0E00,#F5A623,#2A338F)'],
-  ['Web Development','Core Web Vitals in 2025: What Every Enterprise Site Must Know','Google\'s performance signals have evolved. Our technical team explains what matters now and how to optimize for maximum impact.','February 12, 2025','linear-gradient(135deg,#041420,#0F5F8A,#4FC3E8)'],
-  ['SEO','Organic Growth vs. Paid Media: A 2025 Strategic Framework','The channel mix question every CMO wrestles with. Our data-backed framework for allocating digital spend effectively.','January 30, 2025','linear-gradient(135deg,#150820,#2A338F,#F5A623)'],
-  ['UI/UX','How UX Friction Is Costing Enterprise SaaS Billions in Churn','The hidden cost of poor interface design in B2B software. Six case studies and what they reveal about retention rates.','January 14, 2025','linear-gradient(135deg,#030409,#2BAADB,#F5A623)'],
-  ['Process','Inside Our Discovery Process: Why We Spend 20% Before We Design','Our most successful projects share one thing in common: deep discovery. Here\'s exactly how we do it and why it works.','December 18, 2024','linear-gradient(135deg,#040A14,#2A338F,#2BAADB)'],
-];
+$posts = [];
+$blog_files = scandir('blogs/');
+foreach ($blog_files as $file) {
+  if (pathinfo($file, PATHINFO_EXTENSION) === 'php' && $file !== '.' && $file !== '..') {
+    $slug = pathinfo($file, PATHINFO_FILENAME);
+    $content = file_get_contents('blogs/' . $file);
+    if (preg_match('/\/\*\\s*(\\{.*?\\})\\s*\*\//s', $content, $matches)) {
+      $meta = json_decode($matches[1]);
+      if ($meta) {
+        $meta->slug = $slug;
+        $posts[] = $meta;
+      }
+    }
+  }
+}
+usort($posts, function($a, $b) { return strtotime($b->date) - strtotime($a->date); });
+
+$page = intval($_GET['page'] ?? 1);
+$per_page = 6;
+$total_pages = ceil(count($posts) / $per_page);
+$offset = ($page - 1) * $per_page;
+$display_posts = array_slice($posts, $offset, $per_page);
 ?>
 
 <div class="pg-hero">
@@ -23,23 +37,42 @@ $posts = [
 <div class="sec">
 <div class="inner">
   <div class="blog-grid">
-    <?php foreach($posts as $i => $post):
+    <?php foreach($display_posts as $i => $post):
       $d = $i % 3 === 0 ? '' : ' d'.($i % 3);
     ?>
     <article class="blog-card rv<?php echo $d; ?>">
-      <div class="blog-img"><div class="blog-bg" style="background:<?php echo $post[4]; ?>"></div></div>
+<div class="blog-img"><div class="blog-bg" style="background:<?php echo htmlspecialchars($post->gradient); ?>"></div></div>
       <div class="blog-body">
-        <div class="blog-cat"><?php echo htmlspecialchars($post[0]); ?></div>
-        <h2 class="blog-title"><?php echo htmlspecialchars($post[1]); ?></h2>
-        <p class="blog-ex"><?php echo htmlspecialchars($post[2]); ?></p>
+        <div class="blog-cat"><?php echo htmlspecialchars($post->cat); ?></div>
+        <h2 class="blog-title"><?php echo htmlspecialchars($post->title); ?></h2>
+        <p class="blog-ex"><?php echo htmlspecialchars($post->excerpt); ?></p>
         <div class="blog-meta">
-          <span><?php echo htmlspecialchars($post[3]); ?></span>
-          <span class="blog-read">Read &rarr;</span>
+          <span><?php echo htmlspecialchars($post->date); ?></span>
+          <a href="blogs/<?php echo htmlspecialchars($post->slug); ?>.php" class="blog-read">Read &rarr;</a>
         </div>
       </div>
     </article>
     <?php endforeach; ?>
   </div>
+  
+  <?php if ($total_pages > 1): ?>
+  <div class="pagination" style="text-align:center;padding:3rem 0;font-family:'Syne',serif;font-weight:600;font-size:1.1rem;">
+    <?php for ($p=1; $p<=$total_pages; $p++): ?>
+      <?php if ($p == $page): ?>
+        <span style="color:#2BAADB;padding:0.5rem 1rem;background:rgba(43,170,219,0.1);border-radius:4px;">[<?php echo $p; ?>]</span>
+      <?php else: ?>
+        <a href="?page=<?php echo $p; ?>" style="color:#aaa;padding:0.5rem 1rem;text-decoration:none;">[<?php echo $p; ?>]</a>
+      <?php endif; ?>
+    <?php endfor; ?>
+    <?php if ($page < $total_pages): ?>
+      <a href="?page=<?php echo $page+1; ?>" style="color:#2BAADB;padding:0.5rem 1.5rem;">Next</a>
+    <?php endif; ?>
+    <?php if ($page > 1): ?>
+      <a href="?page=<?php echo $page-1; ?>" style="color:#2BAADB;padding:0.5rem 1.5rem;">Back</a>
+    <?php endif; ?>
+  </div>
+  <?php endif; ?>
+  
 </div>
 </div>
 
@@ -54,3 +87,4 @@ $posts = [
 </div>
 
 <?php require_once 'includes/footer.php'; ?>
+
