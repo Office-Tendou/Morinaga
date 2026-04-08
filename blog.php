@@ -3,29 +3,46 @@ $page_title = 'Blog & Insights — Tendou Creative Agency';
 $meta_desc  = 'Strategy, design, and digital intelligence from Tendou\'s team of creative and technical experts.';
 require_once 'includes/header.php';
 
-$posts = [];
-$blog_files = scandir('blogs/');
-foreach ($blog_files as $file) {
-  if (pathinfo($file, PATHINFO_EXTENSION) === 'php' && $file !== '.' && $file !== '..') {
-    $slug = pathinfo($file, PATHINFO_FILENAME);
-    $content = file_get_contents('blogs/' . $file);
-    if (preg_match('/\/\*\\s*(\\{.*?\\})\\s*\*\//s', $content, $matches)) {
-      $meta = json_decode($matches[1]);
-      if ($meta) {
-        $meta->slug = $slug;
-        $posts[] = $meta;
-      }
-    }
-  }
-}
-usort($posts, function($a, $b) { return strtotime($b->date) - strtotime($a->date); });
 
-$page = intval($_GET['page'] ?? 1);
+
+// Dynamic blog posts from blogs/ directory
+$blog_files = glob("blogs/*.php");
+$posts = [];
+foreach ($blog_files as $file) {
+  $content = file_get_contents($file);
+  $slug = basename($file, ".php");
+  if (preg_match("/'title'\\s*=>\\s*'([^']+)/", $content, $m)) {
+    $title = $m[1];
+  } else continue;
+  if (preg_match("/'cat'\\s*=>\\s*'([^']+)/", $content, $m)) {
+    $cat = $m[1];
+  } else $cat = 'Strategy';
+  if (preg_match("/'date'\\s*=>\\s*'([^']+)/", $content, $m)) {
+    $date = $m[1];
+  } else $date = '2024-12-01';
+  if (preg_match("/'cover'\\s*=>\\s*'([^']+)/", $content, $m)) {
+    $gradient = $m[1];
+  } else $gradient = 'linear-gradient(135deg,#0B0E28,#2A338F,#2BAADB)';
+  // Extract excerpt from first p tag, max 120 chars
+  if (preg_match("/<p[^>]*>([^<]{50,150})<\\/p>/", $content, $m)) {
+    $excerpt = trim(strip_tags($m[1]));
+    $excerpt = strlen($excerpt) > 120 ? substr($excerpt, 0, 120) . '...' : $excerpt;
+  } else {
+    $excerpt = substr($title, 0, 120) . '...';
+  }
+  $posts[] = [$cat, $title, $excerpt, $date, $gradient, $slug];
+}
+usort($posts, function($a, $b) { return strtotime($b[3]) - strtotime($a[3]); }); // Sort desc by date
+
+// Pagination
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 $per_page = 6;
-$total_pages = ceil(count($posts) / $per_page);
+$total_posts = count($posts);
+$total_pages = ceil($total_posts / $per_page);
 $offset = ($page - 1) * $per_page;
 $display_posts = array_slice($posts, $offset, $per_page);
 ?>
+<link rel="stylesheet" href="assets/css/blog.css">
 
 <div class="pg-hero">
   <div class="pg-glow"></div>
@@ -40,39 +57,37 @@ $display_posts = array_slice($posts, $offset, $per_page);
     <?php foreach($display_posts as $i => $post):
       $d = $i % 3 === 0 ? '' : ' d'.($i % 3);
     ?>
-    <article class="blog-card rv<?php echo $d; ?>">
-<div class="blog-img"><div class="blog-bg" style="background:<?php echo htmlspecialchars($post->gradient); ?>"></div></div>
-      <div class="blog-body">
-        <div class="blog-cat"><?php echo htmlspecialchars($post->cat); ?></div>
-        <h2 class="blog-title"><?php echo htmlspecialchars($post->title); ?></h2>
-        <p class="blog-ex"><?php echo htmlspecialchars($post->excerpt); ?></p>
-        <div class="blog-meta">
-          <span><?php echo htmlspecialchars($post->date); ?></span>
-          <a href="blogs/<?php echo htmlspecialchars($post->slug); ?>.php" class="blog-read">Read &rarr;</a>
+    <a href="blogs/<?php echo htmlspecialchars($post[5]); ?>.php" class="blog-card-link">
+      <article class="blog-card rv<?php echo $d; ?>">
+        <div class="blog-img"><div class="blog-bg" style="background:<?php echo $post[4]; ?>"></div></div>
+        <div class="blog-body">
+          <div class="blog-cat"><?php echo htmlspecialchars($post[0]); ?></div>
+          <h2 class="blog-title"><?php echo htmlspecialchars($post[1]); ?></h2>
+          <p class="blog-ex"><?php echo htmlspecialchars($post[2]); ?></p>
+          <div class="blog-meta">
+            <span><?php echo htmlspecialchars($post[3]); ?></span>
+            <span class="blog-read">Read &rarr;</span>
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </a>
     <?php endforeach; ?>
   </div>
-  
+
+  <!-- Pagination -->
   <?php if ($total_pages > 1): ?>
-  <div class="pagination" style="text-align:center;padding:3rem 0;font-family:'Syne',serif;font-weight:600;font-size:1.1rem;">
-    <?php for ($p=1; $p<=$total_pages; $p++): ?>
-      <?php if ($p == $page): ?>
-        <span style="color:#2BAADB;padding:0.5rem 1rem;background:rgba(43,170,219,0.1);border-radius:4px;">[<?php echo $p; ?>]</span>
-      <?php else: ?>
-        <a href="?page=<?php echo $p; ?>" style="color:#aaa;padding:0.5rem 1rem;text-decoration:none;">[<?php echo $p; ?>]</a>
-      <?php endif; ?>
+  <div class="pagination rv">
+    <?php if ($page > 1): ?>
+      <a href="?page=<?= $page - 1; ?>" class="pag-link">← Prev</a>
+    <?php endif; ?>
+    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+      <a href="?page=<?= $i; ?>" class="pag-link <?= $i == $page ? 'active' : ''; ?>"><?= $i; ?></a>
     <?php endfor; ?>
     <?php if ($page < $total_pages): ?>
-      <a href="?page=<?php echo $page+1; ?>" style="color:#2BAADB;padding:0.5rem 1.5rem;">Next</a>
-    <?php endif; ?>
-    <?php if ($page > 1): ?>
-      <a href="?page=<?php echo $page-1; ?>" style="color:#2BAADB;padding:0.5rem 1.5rem;">Back</a>
+      <a href="?page=<?= $page + 1; ?>" class="pag-link">Next →</a>
     <?php endif; ?>
   </div>
   <?php endif; ?>
-  
 </div>
 </div>
 
