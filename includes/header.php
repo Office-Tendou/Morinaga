@@ -53,7 +53,7 @@ $href  = ($slug==='index') ? (($is_blog_sub ? '../index.php' : 'index.php')) : (
   </div>
   <div class="nav-right">
     <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀</span></button>
-    <a href="../morinaga/contact.php" class="nav-cta"><span>Start a Project</span></a>
+    <a href="../Morinaga/contact.php" class="nav-cta"><span>Start a Project</span></a>
     <button class="ham" onclick="toggleMob()" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
