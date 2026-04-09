@@ -107,7 +107,7 @@ nav {
   transition: background .4s, border-color .4s;
 }
 .nav-logo { flex-shrink: 0; }
-.nav-logo img { height: 32px; width: auto; }
+.nav-logo img { height: 28px; width: auto; }
 .nav-links { display: flex; gap: 2rem; align-items: center; margin-left: auto; }
 .nav-links a {
   font-family: var(--font-h); font-size: .72rem; font-weight: 600;

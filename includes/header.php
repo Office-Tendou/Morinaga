@@ -15,6 +15,10 @@ $desc      = isset($meta_desc)  ? htmlspecialchars($meta_desc)  : 'Tendou is a p
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?php echo $title; ?></title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/image/favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/image/favicon32.png">
 <meta name="description" content="<?php echo $desc; ?>">
 <meta name="keywords" content="web design, animation, branding, UI UX, SEO, app development, Grand Prairie TX, creative agency">
 <meta property="og:title" content="<?php echo $title; ?>">
@@ -50,7 +54,7 @@ $href  = ($slug==='index') ? (($is_blog_sub ? '../index.php' : 'index.php')) : (
   </div>
   <div class="nav-right">
     <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀</span></button>
-    <a href="../contact" class="nav-cta"><span>Start a Project</span></a>
+    <a href="../morinaga/contact.php" class="nav-cta"><span>Start a Project</span></a>
     <button class="ham" onclick="toggleMob()" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
