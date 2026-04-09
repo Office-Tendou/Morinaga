@@ -20,8 +20,9 @@ $desc      = isset($meta_desc)  ? htmlspecialchars($meta_desc)  : 'Tendou is a p
 <link rel="canonical" href="https://tendou.us/<?php echo ($current==='index')?'':$current.'.php'; ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/morinaga/assets/css/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+
 </head>
 <body>
 
@@ -29,8 +30,8 @@ $desc      = isset($meta_desc)  ? htmlspecialchars($meta_desc)  : 'Tendou is a p
 <div id="cur-ring"></div>
 
 <nav id="mainNav">
-  <a class="nav-logo" href="../index.php">
-    <img src="/morinaga/assets/image/logo.png" alt="Tendou" height="32">
+<a class="nav-logo" href="../index.php">
+    <img src="assets/image/logo.png" alt="Tendou" height="32">
   </a>
   <div class="nav-links">
     <?php
