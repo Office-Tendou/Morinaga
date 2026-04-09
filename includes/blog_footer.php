@@ -53,7 +53,7 @@
       <div class="ft-ci"><strong>Hours</strong>Mon–Fri, 9am–6pm EST</div>
     </div>
   </div>
-  <div class="ft-bottom">
+  <div class="ft-bottom" style="padding:2rem 4rem 0rem;">
     <span class="ft-copy">&copy; <?php echo date('Y'); ?> Tendou. All rights reserved.</span>
     <div class="ft-legal">
       <a href="../privacy-policy.php">Privacy Policy</a>

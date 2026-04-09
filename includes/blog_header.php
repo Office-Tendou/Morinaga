@@ -1,7 +1,7 @@
 <?php
 // blog_header.php - Full head + blog hero
 $current = 'blog';
-require_once '../includes/header.php';
+require_once 'header.php';
 ?>
 <link rel="stylesheet" href="../assets/css/blog.css">
 

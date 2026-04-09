@@ -1,10 +1,14 @@
 <?php
 // includes/header.php — Shared header, nav, meta tags
+$script_name = $_SERVER['SCRIPT_NAME'];
+$is_blog_post = strpos($script_name, '/blogs/') !== false;
+$css_base = $is_blog_post ? '../' : '';
 $current   = basename($_SERVER['PHP_SELF'], '.php');
 if (strpos($current, 'blog-') === 0) $current = 'blog';
 $title     = isset($page_title) ? htmlspecialchars($page_title) : 'Tendou — Creative Agency | Web · Animation · Brand';
 $desc      = isset($meta_desc)  ? htmlspecialchars($meta_desc)  : 'Tendou is a premium creative agency in Grand Prairie TX. Web design, animation, branding and digital marketing for enterprise clients.';
 ?>
+
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -20,8 +24,8 @@ $desc      = isset($meta_desc)  ? htmlspecialchars($meta_desc)  : 'Tendou is a p
 <link rel="canonical" href="https://tendou.us/<?php echo ($current==='index')?'':$current.'.php'; ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/main.css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="<?php echo $css_base; ?>assets/css/main.css">
 
 </head>
 <body>
@@ -30,8 +34,8 @@ $desc      = isset($meta_desc)  ? htmlspecialchars($meta_desc)  : 'Tendou is a p
 <div id="cur-ring"></div>
 
 <nav id="mainNav">
-<a class="nav-logo" href="../index.php">
-    <img src="assets/image/logo.png" alt="Tendou" height="32">
+<a class="nav-logo" href="<?php echo $is_blog_post ? '../index.php' : 'index.php'; ?>">
+    <img src="<?php echo $css_base; ?>assets/image/logo.png" alt="Tendou" height="32">
   </a>
   <div class="nav-links">
     <?php
